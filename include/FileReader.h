@@ -39,8 +39,8 @@ public:
     void lireFichierManager(vector<Manager>& managers);
     void ecrireFichierManager(const vector<Manager>& managers);
 
-    void lireFichierProgrammeur(vector<Programmeur>& programmeurs);
-    void ecrireFichierProgrammeur(const vector<Programmeur>& programmeurs);
+    void lireFichierProgrammeur(vector<Programmer>& programmeurs);
+    void ecrireFichierProgrammeur(const vector<Programmer>& programmeurs);
     ~LecteurFichier();
 };
 

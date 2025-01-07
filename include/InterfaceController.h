@@ -12,11 +12,11 @@ Description: Définition du Gestionnaire de l'interface graphique
 #define GESTIONNAIRE_INTERFACE_H
 
 #include <wx/wx.h>
-#include "GestionnaireEmployes.h"
+#include "EmployeeController.h"
 
-class GestionnaireInterface : public wxFrame {
+class InterfaceController : public wxFrame {
 public:
-    GestionnaireInterface();  // Constructor
+    InterfaceController();  // Constructor
     enum {
         ID_MENU_LIRE,
         ID_MENU_SAUVEGARDER,
@@ -26,7 +26,7 @@ public:
         ID_MENU_APROPOS
     };
 private:
-    GestionnaireEmployes gestionnaireEmployes; // Membre de type GestionnaireEmployes
+    EmployeeController gestionnaireEmployes; // Membre de type EmployeeController
 
     wxTextCtrl* txtManager;       // texte pour le fichier Managers
     wxTextCtrl* txtProgrammeur;   // texte pour le fichier Programmeurs

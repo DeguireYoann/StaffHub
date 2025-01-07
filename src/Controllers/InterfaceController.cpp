@@ -7,14 +7,14 @@ Auteur: Yoann Deguire - decembre 2024
 Description: Gestionnaire de l'interface graphique
 ------------
 */
-#include "gestionnaireInterface.h"
-#include "lecteurFichier.h"
-#include "programmeur.h"
-#include "manager.h"
+#include "InterfaceController.h"
+#include "FileReader.h"
+#include "Programmer.h"
+#include "Manager.h"
 
 using namespace std;
 
-GestionnaireInterface::GestionnaireInterface()
+InterfaceController::InterfaceController()
     : wxFrame(nullptr, -1, "Charger les fichiers", wxDefaultPosition, wxDefaultSize) {
     // Créer le panel principal
     currentPanel = new wxPanel(this);
@@ -34,11 +34,11 @@ GestionnaireInterface::GestionnaireInterface()
     btnProcess->Bind(wxEVT_BUTTON, [this, fichierManager, fichierProgrammeur](wxCommandEvent&) {
         this->validerFichier(fichierManager->GetValue(), fichierProgrammeur->GetValue());
     });
-    Bind(wxEVT_CLOSE_WINDOW, &GestionnaireInterface::OnClose, this);
+    Bind(wxEVT_CLOSE_WINDOW, &InterfaceController::OnClose, this);
     ajouterMenu();
 }
 
-void GestionnaireInterface::lire(wxCommandEvent& event) {
+void InterfaceController::lire(wxCommandEvent& event) {
    // Créer le panel principal
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
@@ -67,7 +67,7 @@ void GestionnaireInterface::lire(wxCommandEvent& event) {
     this->Refresh();
 }
 
-void GestionnaireInterface::sauvegarder(wxCommandEvent& event) {
+void InterfaceController::sauvegarder(wxCommandEvent& event) {
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
     }
@@ -94,7 +94,7 @@ void GestionnaireInterface::sauvegarder(wxCommandEvent& event) {
     this->Refresh();
     }
 
-void GestionnaireInterface::afficherPropos(wxCommandEvent& event) {
+void InterfaceController::afficherPropos(wxCommandEvent& event) {
     wxDialog* proposDialog = new wxDialog(this, wxID_ANY, "A propos", wxDefaultPosition, wxSize(400, 200));
 
     wxPanel* panel = new wxPanel(proposDialog);
@@ -119,7 +119,7 @@ void GestionnaireInterface::afficherPropos(wxCommandEvent& event) {
     proposDialog->Destroy();
 }
 
-void GestionnaireInterface::ajouterMenu() {
+void InterfaceController::ajouterMenu() {
     wxMenu* menuFichier = new wxMenu;
     wxMenu* menu = new wxMenu;
 
@@ -142,17 +142,17 @@ void GestionnaireInterface::ajouterMenu() {
     SetMenuBar(menuBar);
 
     // Connecter les boutons pour menuFichier
-    Bind(wxEVT_MENU, &GestionnaireInterface::lire, this, ID_MENU_LIRE);
-    Bind(wxEVT_MENU, &GestionnaireInterface::sauvegarder, this, ID_MENU_SAUVEGARDER);
+    Bind(wxEVT_MENU, &InterfaceController::lire, this, ID_MENU_LIRE);
+    Bind(wxEVT_MENU, &InterfaceController::sauvegarder, this, ID_MENU_SAUVEGARDER);
 
     // Connecter les boutons pour menu
-    Bind(wxEVT_MENU, &GestionnaireInterface::rechercher, this, ID_MENU_RECHERCHER);
-    Bind(wxEVT_MENU, &GestionnaireInterface::ajouter, this, ID_MENU_AJOUTER);
-    Bind(wxEVT_MENU, &GestionnaireInterface::supprimer, this, ID_MENU_SUPPRIMER);
-    Bind(wxEVT_MENU, &GestionnaireInterface::afficherPropos, this, ID_MENU_APROPOS);
+    Bind(wxEVT_MENU, &InterfaceController::rechercher, this, ID_MENU_RECHERCHER);
+    Bind(wxEVT_MENU, &InterfaceController::ajouter, this, ID_MENU_AJOUTER);
+    Bind(wxEVT_MENU, &InterfaceController::supprimer, this, ID_MENU_SUPPRIMER);
+    Bind(wxEVT_MENU, &InterfaceController::afficherPropos, this, ID_MENU_APROPOS);
 }
 
-void GestionnaireInterface::validerFichier(const wxString& fichierManager, const wxString& fichierProg) {
+void InterfaceController::validerFichier(const wxString& fichierManager, const wxString& fichierProg) {
     // Si il manque un fichier afficher un message
     if (fichierManager.IsEmpty() || fichierProg.IsEmpty()) {
         wxMessageBox("Veuillez valider les deux champs avant de continuer.", "Erreur", wxOK | wxICON_ERROR);
@@ -173,7 +173,7 @@ void GestionnaireInterface::validerFichier(const wxString& fichierManager, const
     */
     if(fichiersValide) {
         vector<Manager> managers;
-        vector<Programmeur> programmeurs;
+        vector<Programmer> programmeurs;
 
         lecteur.lireFichierManager(managers);
         lecteur.lireFichierProgrammeur(programmeurs);
@@ -198,7 +198,7 @@ void GestionnaireInterface::validerFichier(const wxString& fichierManager, const
     }
 }
 
-void GestionnaireInterface::sauvegarderFichier(const wxString& fichierManager, const wxString& fichierProg) {
+void InterfaceController::sauvegarderFichier(const wxString& fichierManager, const wxString& fichierProg) {
     // Si il manque un fichier afficher un message
     if (fichierManager.IsEmpty() || fichierProg.IsEmpty()) {
         wxMessageBox("Veuillez valider les deux champs avant de continuer.", "Erreur", wxOK | wxICON_ERROR);
@@ -217,7 +217,7 @@ void GestionnaireInterface::sauvegarderFichier(const wxString& fichierManager, c
     wxMessageBox("Fichier Sauvegarder", "Sauvegarde", wxOK | wxICON_INFORMATION);
 }
 
-void GestionnaireInterface::afficherMenuPrincipal() {
+void InterfaceController::afficherMenuPrincipal() {
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
     }
@@ -234,9 +234,9 @@ void GestionnaireInterface::afficherMenuPrincipal() {
     wxButton* btnSupprimer = new wxButton(currentPanel, -1, "Supprimer", wxPoint(50, 120), wxSize(100, 30));
 
     // Connecter les events des boutons
-    btnRechercher->Bind(wxEVT_BUTTON, &GestionnaireInterface::rechercher, this);
-    btnAjouter->Bind(wxEVT_BUTTON, &GestionnaireInterface::ajouter, this);
-    btnSupprimer->Bind(wxEVT_BUTTON, &GestionnaireInterface::supprimer, this);
+    btnRechercher->Bind(wxEVT_BUTTON, &InterfaceController::rechercher, this);
+    btnAjouter->Bind(wxEVT_BUTTON, &InterfaceController::ajouter, this);
+    btnSupprimer->Bind(wxEVT_BUTTON, &InterfaceController::supprimer, this);
 
     // Ajuster la taille de la fenêtre
     currentPanel->Show(true);
@@ -247,7 +247,7 @@ void GestionnaireInterface::afficherMenuPrincipal() {
 
 
 
-void GestionnaireInterface::rechercher(wxCommandEvent& event) {
+void InterfaceController::rechercher(wxCommandEvent& event) {
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
     }
@@ -350,7 +350,7 @@ void GestionnaireInterface::rechercher(wxCommandEvent& event) {
  * Methode pour ouvrir la fenetre de recherche
  * Prend en parametres les strings pour l'affichage et un fonction pour traiter l'action
  */
-void GestionnaireInterface::ouvrirFenetreRecherche(
+void InterfaceController::ouvrirFenetreRecherche(
     const wxString& titreFenetre, 
     const wxString& texteLabel, 
     function<string(const string&)> fonctionTraitement
@@ -384,7 +384,7 @@ void GestionnaireInterface::ouvrirFenetreRecherche(
     frame->Show(true);
 }
 
-void GestionnaireInterface::ajouter(wxCommandEvent& event) {
+void InterfaceController::ajouter(wxCommandEvent& event) {
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
     }
@@ -408,8 +408,8 @@ void GestionnaireInterface::ajouter(wxCommandEvent& event) {
             "au manager:",
             "ajouter",
             gestionnaireEmployes.getManagers(),
-            [this](const string& nom, const string& projet) {
-                return this->gestionnaireEmployes.ajouterProjetAuManager(nom, projet);
+            [this](const string& lastName, const string& projet) {
+                return this->gestionnaireEmployes.ajouterProjetAuManager(lastName, projet);
             }
         );
     });
@@ -423,8 +423,8 @@ void GestionnaireInterface::ajouter(wxCommandEvent& event) {
             "au manager:",
             "ajouter",
             gestionnaireEmployes.getManagers(),
-            [this](const string& nom, const string& prog) {
-                return this->gestionnaireEmployes.ajouterProgAuManager(nom, prog);
+            [this](const string& lastName, const string& prog) {
+                return this->gestionnaireEmployes.ajouterProgAuManager(lastName, prog);
             }
         );
     });
@@ -438,8 +438,8 @@ void GestionnaireInterface::ajouter(wxCommandEvent& event) {
             "au programmeur:",
             "ajouter",
             gestionnaireEmployes.getProgrammeurs(),
-            [this](const string& nom, const string& projet) {
-                return this->gestionnaireEmployes.ajouterProjetAuProg(nom, projet);
+            [this](const string& lastName, const string& projet) {
+                return this->gestionnaireEmployes.ajouterProjetAuProg(lastName, projet);
             }
         );
     });
@@ -454,7 +454,7 @@ void GestionnaireInterface::ajouter(wxCommandEvent& event) {
     this->Refresh();
 }
 
-void GestionnaireInterface::supprimer(wxCommandEvent& event) {
+void InterfaceController::supprimer(wxCommandEvent& event) {
     if (currentPanel) {
         currentPanel->Destroy();  // Détruire l'ancien panel
     }
@@ -478,8 +478,8 @@ void GestionnaireInterface::supprimer(wxCommandEvent& event) {
             "au manager:",
             "retirer",
             gestionnaireEmployes.getManagers(),
-            [this](const string& nom, const string& projet) {
-                return this->gestionnaireEmployes.supprimerProjetAuManager(nom, projet);
+            [this](const string& lastName, const string& projet) {
+                return this->gestionnaireEmployes.supprimerProjetAuManager(lastName, projet);
             }
         );
     });
@@ -493,8 +493,8 @@ void GestionnaireInterface::supprimer(wxCommandEvent& event) {
             "au manager:",
             "retirer",
             gestionnaireEmployes.getManagers(),
-            [this](const string& nom, const string& prog) {
-                return this->gestionnaireEmployes.supprimerProgAuManager(nom, prog);
+            [this](const string& lastName, const string& prog) {
+                return this->gestionnaireEmployes.supprimerProgAuManager(lastName, prog);
             }
         );
     });
@@ -508,8 +508,8 @@ void GestionnaireInterface::supprimer(wxCommandEvent& event) {
             "au programmeur:",
             "retirer",
             gestionnaireEmployes.getProgrammeurs(),
-            [this](const string& nom, const string& projet) {
-                return this->gestionnaireEmployes.supprimerProjetAuProg(nom, projet);
+            [this](const string& lastName, const string& projet) {
+                return this->gestionnaireEmployes.supprimerProjetAuProg(lastName, projet);
             }
         );
     });
@@ -529,7 +529,7 @@ void GestionnaireInterface::supprimer(wxCommandEvent& event) {
  * Prend en parametres les strings pour l'affichage et un fonction pour traiter l'action
  */
 template <typename T>
-void GestionnaireInterface::ouvrirFenetreAjouterSupprimer(
+void InterfaceController::ouvrirFenetreAjouterSupprimer(
     const wxString& titreFenetre, 
     const wxString& texteLabel1, 
     const wxString& texteLabel2,
@@ -555,8 +555,8 @@ void GestionnaireInterface::ouvrirFenetreAjouterSupprimer(
     // Créer un dropdown pour les noms
     wxArrayString nomsArray;
     for (auto& item : employes) {
-        const string nom = item.getNom(); 
-        nomsArray.Add(nom); // Ajouter les noms des employés
+        const string lastName = item.getLastName(); 
+        nomsArray.Add(lastName); // Ajouter les noms des employés
     }
     wxChoice* dropdownNoms = new wxChoice(panneau, wxID_ANY, wxPoint(200, 68), wxSize(150, 25), nomsArray);
 
@@ -566,7 +566,7 @@ void GestionnaireInterface::ouvrirFenetreAjouterSupprimer(
     // Connecter le bouton
     btnProcess->Bind(wxEVT_BUTTON, [this, propriete, action, dropdownNoms, fonctionTraitement](wxCommandEvent& event) {
         
-        // Récupérer le nom sélectionné dans le dropdown
+        // Récupérer le lastName sélectionné dans le dropdown
         wxString nomSelectionner = dropdownNoms->GetStringSelection();
         try {
             fonctionTraitement(nomSelectionner.ToStdString(), propriete->GetValue().ToStdString());
@@ -582,7 +582,7 @@ void GestionnaireInterface::ouvrirFenetreAjouterSupprimer(
     searchFrame->Show(true);
 }
 
-void GestionnaireInterface::OnClose(wxCloseEvent& event) {
+void InterfaceController::OnClose(wxCloseEvent& event) {
     // Afficher une boîte de dialogue pour demander confirmation
     int result = wxMessageBox(
         "Voulez-vous sauvegarder les fichiers avant de fermer l'application ?", 

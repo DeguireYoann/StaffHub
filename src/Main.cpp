@@ -14,7 +14,7 @@ Description: Travail pratique #3
 class TP3A24App : public wxApp {
 public:
     virtual bool OnInit() {
-        GestionnaireInterface* gestionnaireInterface = new GestionnaireInterface();
+        InterfaceController* gestionnaireInterface = new InterfaceController();
         gestionnaireInterface->Show(true);
         return true;
     }

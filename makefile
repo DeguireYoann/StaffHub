@@ -21,7 +21,7 @@ all: tp3A24$(extension)
 	$(CXX) $(CXXFLAGS) $(OPT) -c $< -o $@
 
 # Création de l'exécutable
-tp3A24$(extension): tp3A24.o employe.o manager.o programmeur.o gestionnaireEmployes.o lecteurFichier.o stringManager.o gestionnaireInterface.o
+tp3A24$(extension): tp3A24.o employe.o manager.o programmeur.o EmployeeController.o lecteurFichier.o stringManager.o gestionnaireInterface.o
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 # Règle pour exécuter le programme
