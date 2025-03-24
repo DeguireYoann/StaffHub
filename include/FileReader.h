@@ -1,18 +1,18 @@
 /*
 
-IFT1169 - TP3 A24 -
 
-Auteur: Yoann Deguire - decembre 2024
+
+Auteur: Yoann Deguire
 
 Description:
-Signature de la classe LecteurFichier
+FileReader class signature
 ------------
 */
 #include <iostream>
 #include <string>
 #include <vector>
-#include "programmeur.h"
-#include "manager.h"
+#include "Programmer.h"
+#include "Manager.h"
 
 using namespace std;
 
@@ -22,8 +22,9 @@ using namespace std;
 class LecteurFichier {
     string routeFichierProg = "";
     string routeFichierManager = "";
-    string enTeteManager[7] = {"Nom", "Prenom", "Age", "Salaire", "Equipe", "Budget", "Projets Supervises"};
-    string enTeteProg[7] = {"Nom", "Prenom", "Age", "Salaire", "Langage de Programmation", "Niveau d'Experience", "Projets en Cours"};
+
+    string enTeteManager[7] = {"LastName", "FirstNAme", "Age", "Salary", "Team", "Budget", "Supervised projects"};
+    string enTeteProg[7] = {"LastName", "FirstName", "Age", "Salary", "Programmation Language", "Experience Level", "Working Projects"};
 public:
     LecteurFichier();
 

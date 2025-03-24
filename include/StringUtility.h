@@ -1,6 +1,6 @@
 /*
 
-Auteur: Yoann Deguire - decembre 2024
+Auteur: Yoann Deguire
 
 Description:
 signature de la classe StringUtility
@@ -19,11 +19,11 @@ class StringUtility {
 public:
     StringUtility();
 
-    string construireSortie(const string& propriete);
-    vector<string> creezVector(const string& propriete);
-    string reconstruireString(const vector<string>& listeMots);
-    string retirerMot(const string& propriete, const string& mot);
-    string ajouterMot(const string& propriete, const string& mot);
+    string buildOutput(const string& property);
+    vector<string> createVector(const string& property);
+    string rebuildString(const vector<string>& wordList);
+    string removeWord(const string& property, const string& word);
+    string addWord(const string& property, const string& word);
 
     ~StringUtility();
 };

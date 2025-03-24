@@ -1,8 +1,8 @@
 /*
 
-IFT1169 - TP3 A24 -
 
-Auteur: Yoann Deguire - decembre 2024
+
+Auteur: Yoann Deguire
 
 Description:
 ------------

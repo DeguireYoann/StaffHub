@@ -1,8 +1,8 @@
 /*
 
-IFT1169 - TP3 A24 -
 
-Author: Yoann Deguire - December 2024
+
+Author: Yoann Deguire 
 
 Description:
 FileReader class to parse CSV files and construct Programmer & Manager objects.

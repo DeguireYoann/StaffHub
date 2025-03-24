@@ -1,6 +1,6 @@
 /*
 
-Author: Yoann Deguire - December 2024
+Author: Yoann Deguire 
 
 Description:
 Employee Class Signature

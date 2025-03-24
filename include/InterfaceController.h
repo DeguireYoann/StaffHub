@@ -1,15 +1,13 @@
 /*
 
-IFT1169 - TP3 A24 -
+Author: Yoann Deguire
 
-Auteur: Yoann Deguire - decembre 2024
-
-Description: Définition du Gestionnaire de l'interface graphique
+Description: Definition of the Graphical Interface Manager
 ------------
 */
 
-#ifndef GESTIONNAIRE_INTERFACE_H
-#define GESTIONNAIRE_INTERFACE_H
+#ifndef INTERFACE_CONTROLLER_H
+#define INTERFACE_CONTROLLER_H
 
 #include <wx/wx.h>
 #include "EmployeeController.h"
@@ -18,45 +16,45 @@ class InterfaceController : public wxFrame {
 public:
     InterfaceController();  // Constructor
     enum {
-        ID_MENU_LIRE,
-        ID_MENU_SAUVEGARDER,
-        ID_MENU_RECHERCHER = wxID_HIGHEST + 1,
-        ID_MENU_AJOUTER,
-        ID_MENU_SUPPRIMER,
-        ID_MENU_APROPOS
+        ID_MENU_READ,
+        ID_MENU_SAVE,
+        ID_MENU_SEARCH = wxID_HIGHEST + 1,
+        ID_MENU_ADD,
+        ID_MENU_DELETE,
+        ID_MENU_ABOUT
     };
 private:
-    EmployeeController gestionnaireEmployes; // Membre de type EmployeeController
+    EmployeeController employeeManager; // Member of type EmployeeController
 
-    wxTextCtrl* txtManager;       // texte pour le fichier Managers
-    wxTextCtrl* txtProgrammeur;   // texte pour le fichier Programmeurs
+    wxTextCtrl* txtManager;       // Text box for the Managers file
+    wxTextCtrl* txtProgrammer;    // Text box for the Programmers file
     wxPanel* currentPanel = nullptr;
     
-    void lire(wxCommandEvent& event); // Ajoute le menu dans la bar
-    void afficherPropos(wxCommandEvent& event); // Afficher le à propos
-    void sauvegarder(wxCommandEvent& event); // Ajoute le menu dans la bar
-    void ajouterMenu(); // Ajoute le menu dans la bar
-    void validerFichier(const wxString& fichierManager, const wxString& fichierProg);  // Valide les routes et les fichiers pour managers et programmeurs
-    void sauvegarderFichier(const wxString& fichierManager, const wxString& fichierProg); // Écrire les fichiers
-    void afficherMenuPrincipal();  // Affiche le menu principal
-    void rechercher(wxCommandEvent& event); // Menu de Recherche
-    void ouvrirFenetreRecherche(
-        const wxString& titreFenetre, 
-        const wxString& texteLabel, 
-        function<string(const string&)> fonctionTraitement
+    void read(wxCommandEvent& event); // Adds the menu to the bar
+    void showAbout(wxCommandEvent& event); // Displays the "About" dialog
+    void save(wxCommandEvent& event); // Adds the menu to the bar
+    void addMenu(); // Adds the menu to the bar
+    void validateFile(const wxString& managerFile, const wxString& programmerFile);  // Validates paths and files for managers and programmers
+    void saveFile(const wxString& managerFile, const wxString& programmerFile); // Writes the files
+    void showMainMenu();  // Displays the main menu
+    void search(wxCommandEvent& event); // Search menu
+    void openSearchWindow(
+        const wxString& windowTitle, 
+        const wxString& labelText, 
+        function<string(const string&)> processingFunction
     );
-    void ajouter(wxCommandEvent& event); // Menu pour ajouter une propriété a un employé
-    void supprimer(wxCommandEvent& event); // Menu pour supprimer une propriété a un employé
+    void add(wxCommandEvent& event); // Menu to add an employee property
+    void delete(wxCommandEvent& event); // Menu to delete an employee property
     template <typename T>
-    void ouvrirFenetreAjouterSupprimer(
-        const wxString& titreFenetre, 
-        const wxString& texteLabel1, 
-        const wxString& texteLabel2,
+    void openAddDeleteWindow(
+        const wxString& windowTitle, 
+        const wxString& labelText1, 
+        const wxString& labelText2,
         const wxString& action,
-        const vector<T>& employes,
-        function<void(const string&, const string&)> fonctionTraitement
+        const vector<T>& employees,
+        function<void(const string&, const string&)> processingFunction
     );
-    void OnClose(wxCloseEvent& event); // Surchage de onClose de wxWidget
+    void OnClose(wxCloseEvent& event); // Overrides wxWidget's OnClose
 };
 
 #endif

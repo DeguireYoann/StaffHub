@@ -1,10 +1,8 @@
 /*
 
-IFT1169 - TP3 A24 -
+Author: Yoann Deguire
 
-Auteur: Yoann Deguire - decembre 2024
-
-Description: Gestionnaire de l'interface graphique
+Description: Graphical Interface Manager
 ------------
 */
 #include "InterfaceController.h"
@@ -15,49 +13,49 @@ Description: Gestionnaire de l'interface graphique
 using namespace std;
 
 InterfaceController::InterfaceController()
-    : wxFrame(nullptr, -1, "Charger les fichiers", wxDefaultPosition, wxDefaultSize) {
-    // Créer le panel principal
+    : wxFrame(nullptr, -1, "Load files", wxDefaultPosition, wxDefaultSize) {
+    // Create main panel
     currentPanel = new wxPanel(this);
     this->SetTitle("Configuration");
     this->Maximize(true);
 
-    // Créer les éléments de l'interface
-    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Fichier Managers:", wxPoint(10, 20));
-    wxTextCtrl* fichierManager = new wxTextCtrl(currentPanel, -1, "./Data/managers.csv", wxPoint(150, 20), wxSize(250, 25));
+    // Create interface elements
+    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Managers file:", wxPoint(10, 20));
+    wxTextCtrl* managerFile = new wxTextCtrl(currentPanel, -1, "./Data/managers.csv", wxPoint(150, 20), wxSize(250, 25));
 
-    wxStaticText* labelProgrammeur = new wxStaticText(currentPanel, -1, "Fichier Programmeurs:", wxPoint(10, 60));
-    wxTextCtrl* fichierProgrammeur = new wxTextCtrl(currentPanel, -1, "./Data/Programmeurs.csv", wxPoint(150, 60), wxSize(250, 25));
+    wxStaticText* labelProgrammer = new wxStaticText(currentPanel, -1, "Programmers file:", wxPoint(10, 60));
+    wxTextCtrl* programmerFile = new wxTextCtrl(currentPanel, -1, "./Data/Programmers.csv", wxPoint(150, 60), wxSize(250, 25));
 
-    wxButton* btnProcess = new wxButton(currentPanel, -1, "Continuer", wxPoint(150, 100), wxSize(100, 30));
+    wxButton* btnProcess = new wxButton(currentPanel, -1, "Continue", wxPoint(150, 100), wxSize(100, 30));
 
-    // Connecter le bouton
-    btnProcess->Bind(wxEVT_BUTTON, [this, fichierManager, fichierProgrammeur](wxCommandEvent&) {
-        this->validerFichier(fichierManager->GetValue(), fichierProgrammeur->GetValue());
+    // Connect button
+    btnProcess->Bind(wxEVT_BUTTON, [this, managerFile, programmerFile](wxCommandEvent&) {
+        this->validateFile(managerFile->GetValue(), programmerFile->GetValue());
     });
     Bind(wxEVT_CLOSE_WINDOW, &InterfaceController::OnClose, this);
-    ajouterMenu();
+    addMenu();
 }
 
-void InterfaceController::lire(wxCommandEvent& event) {
-   // Créer le panel principal
+void InterfaceController::read(wxCommandEvent& event) {
+   // Create main panel
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
     currentPanel = new wxPanel(this);
-    this->SetTitle("Lire");
+    this->SetTitle("Read");
 
-    // Créer les éléments de l'interface
-    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Fichier Managers:", wxPoint(10, 20));
-    wxTextCtrl* fichierManager = new wxTextCtrl(currentPanel, -1, "./Data/managers.csv", wxPoint(150, 20), wxSize(250, 25));
+    // Create interface elements
+    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Managers file:", wxPoint(10, 20));
+    wxTextCtrl* managerFile = new wxTextCtrl(currentPanel, -1, "./Data/managers.csv", wxPoint(150, 20), wxSize(250, 25));
 
-    wxStaticText* labelProgrammeur = new wxStaticText(currentPanel, -1, "Fichier Programmeurs:", wxPoint(10, 60));
-    wxTextCtrl* fichierProgrammeur = new wxTextCtrl(currentPanel, -1, "./Data/Programmeurs.csv", wxPoint(150, 60), wxSize(250, 25));
+    wxStaticText* labelProgrammer = new wxStaticText(currentPanel, -1, "Programmers file:", wxPoint(10, 60));
+    wxTextCtrl* programmerFile = new wxTextCtrl(currentPanel, -1, "./Data/Programmers.csv", wxPoint(150, 60), wxSize(250, 25));
 
-    wxButton* btnProcess = new wxButton(currentPanel, -1, "Continuer", wxPoint(150, 100), wxSize(100, 30));
+    wxButton* btnProcess = new wxButton(currentPanel, -1, "Continue", wxPoint(150, 100), wxSize(100, 30));
 
-    // Connecter le bouton
-    btnProcess->Bind(wxEVT_BUTTON, [this, fichierManager, fichierProgrammeur](wxCommandEvent&) {
-        this->validerFichier(fichierManager->GetValue(), fichierProgrammeur->GetValue());
+    // Connect button
+    btnProcess->Bind(wxEVT_BUTTON, [this, managerFile, programmerFile](wxCommandEvent&) {
+        this->validateFile(managerFile->GetValue(), programmerFile->GetValue());
     });
 
     currentPanel->Layout();
@@ -67,24 +65,24 @@ void InterfaceController::lire(wxCommandEvent& event) {
     this->Refresh();
 }
 
-void InterfaceController::sauvegarder(wxCommandEvent& event) {
+void InterfaceController::save(wxCommandEvent& event) {
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
     currentPanel = new wxPanel(this);
-    this->SetTitle("Sauvegarder");
+    this->SetTitle("Save");
 
-    // Créer les éléments de l'interface
-    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Fichier Managers:", wxPoint(10, 20));
-    wxTextCtrl* fichierManager = new wxTextCtrl(currentPanel, -1, "./Data/managers_nouveau.csv", wxPoint(150, 20), wxSize(250, 25));
+    // Create interface elements
+    wxStaticText* labelManager = new wxStaticText(currentPanel, -1, "Managers file:", wxPoint(10, 20));
+    wxTextCtrl* managerFile = new wxTextCtrl(currentPanel, -1, "./Data/managers_new.csv", wxPoint(150, 20), wxSize(250, 25));
 
-    wxStaticText* labelProgrammeur = new wxStaticText(currentPanel, -1, "Fichier Programmeurs:", wxPoint(10, 60));
-    wxTextCtrl* fichierProgrammeur = new wxTextCtrl(currentPanel, -1, "./Data/Programmeurs_nouveau.csv", wxPoint(150, 60), wxSize(250, 25));
+    wxStaticText* labelProgrammer = new wxStaticText(currentPanel, -1, "Programmers file:", wxPoint(10, 60));
+    wxTextCtrl* programmerFile = new wxTextCtrl(currentPanel, -1, "./Data/Programmers_new.csv", wxPoint(150, 60), wxSize(250, 25));
 
-    wxButton* btnProcess = new wxButton(currentPanel, -1, "Sauvegarder", wxPoint(150, 100), wxSize(100, 30));
+    wxButton* btnProcess = new wxButton(currentPanel, -1, "Save", wxPoint(150, 100), wxSize(100, 30));
 
-    btnProcess->Bind(wxEVT_BUTTON, [this, fichierManager, fichierProgrammeur, &event](wxCommandEvent&) {
-        this->sauvegarderFichier(fichierManager->GetValue(), fichierProgrammeur->GetValue());
+    btnProcess->Bind(wxEVT_BUTTON, [this, managerFile, programmerFile, &event](wxCommandEvent&) {
+        this->saveFile(managerFile->GetValue(), programmerFile->GetValue());
     });
 
     currentPanel->Layout();
@@ -94,251 +92,247 @@ void InterfaceController::sauvegarder(wxCommandEvent& event) {
     this->Refresh();
     }
 
-void InterfaceController::afficherPropos(wxCommandEvent& event) {
-    wxDialog* proposDialog = new wxDialog(this, wxID_ANY, "A propos", wxDefaultPosition, wxSize(400, 200));
+void InterfaceController::showAbout(wxCommandEvent& event) {
+    wxDialog* aboutDialog = new wxDialog(this, wxID_ANY, "About", wxDefaultPosition, wxSize(400, 200));
 
-    wxPanel* panel = new wxPanel(proposDialog);
+    wxPanel* panel = new wxPanel(aboutDialog);
 
-    wxStaticText* auteurTitre = new wxStaticText(panel, wxID_ANY, "Auteur : Yoann Deguire", wxPoint(20, 20));
-    auteurTitre->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    wxStaticText* authorTitle = new wxStaticText(panel, wxID_ANY, "Author: Yoann Deguire", wxPoint(20, 20));
+    authorTitle->SetFont(wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
-    wxStaticText* descriptionTexte = new wxStaticText(panel, wxID_ANY, 
-        "Travail realise dans le cadre du TP3 du cours IFT-1169 durant la session d'automne 2024.",
+    wxStaticText* descriptionText = new wxStaticText(panel, wxID_ANY, 
+        "Work done for TP3 of course IFT-1169 during Fall 2024 semester.",
         wxPoint(20, 60), wxSize(360, 80));
 
-    // Ajouter un bouton OK pour fermer
+    // Add OK button to close
     wxButton* btnClose = new wxButton(panel, wxID_OK, "OK", wxPoint(150, 150), wxSize(100, 30));
 
-    // Connecter le bouton OK
-    btnClose->Bind(wxEVT_BUTTON, [proposDialog](wxCommandEvent&) {
-        proposDialog->EndModal(wxID_OK);
+    // Connect OK button
+    btnClose->Bind(wxEVT_BUTTON, [aboutDialog](wxCommandEvent&) {
+        aboutDialog->EndModal(wxID_OK);
     });
 
-    proposDialog->ShowModal();
-    // Liberer la mémoire après la fermeture
-    proposDialog->Destroy();
+    aboutDialog->ShowModal();
+    // Free memory after closing
+    aboutDialog->Destroy();
 }
 
-void InterfaceController::ajouterMenu() {
-    wxMenu* menuFichier = new wxMenu;
+void InterfaceController::addMenu() {
+    wxMenu* fileMenu = new wxMenu;
     wxMenu* menu = new wxMenu;
 
-    // Ajouter les éléments de menuFichier
-    menuFichier->Append(ID_MENU_LIRE, "Lire");
-    menuFichier->Append(ID_MENU_SAUVEGARDER, "Sauvegarder");
+    // Add items to fileMenu
+    fileMenu->Append(ID_MENU_READ, "Read");
+    fileMenu->Append(ID_MENU_SAVE, "Save");
 
-    // Ajouter les éléments de menu
-    menu->Append(ID_MENU_RECHERCHER, "Rechercher");
-    menu->Append(ID_MENU_AJOUTER, "Ajouter");
-    menu->Append(ID_MENU_SUPPRIMER, "Supprimer");
-    menu->Append(ID_MENU_APROPOS, "A Propos");
+    // Add items to menu
+    menu->Append(ID_MENU_SEARCH, "Search");
+    menu->Append(ID_MENU_ADD, "Add");
+    menu->Append(ID_MENU_DELETE, "Delete");
+    menu->Append(ID_MENU_ABOUT, "About");
 
-    // Créer un menu bar et ajouter le menu
+    // Create menu bar and add menu
     wxMenuBar* menuBar = new wxMenuBar;
-    menuBar->Append(menuFichier, "Fichier");
+    menuBar->Append(fileMenu, "File");
     menuBar->Append(menu, "Menu");
 
-    // Ajouter le menu bar à la fenêtre
+    // Add menu bar to window
     SetMenuBar(menuBar);
 
-    // Connecter les boutons pour menuFichier
-    Bind(wxEVT_MENU, &InterfaceController::lire, this, ID_MENU_LIRE);
-    Bind(wxEVT_MENU, &InterfaceController::sauvegarder, this, ID_MENU_SAUVEGARDER);
+    // Connect buttons for fileMenu
+    Bind(wxEVT_MENU, &InterfaceController::read, this, ID_MENU_READ);
+    Bind(wxEVT_MENU, &InterfaceController::save, this, ID_MENU_SAVE);
 
-    // Connecter les boutons pour menu
-    Bind(wxEVT_MENU, &InterfaceController::rechercher, this, ID_MENU_RECHERCHER);
-    Bind(wxEVT_MENU, &InterfaceController::ajouter, this, ID_MENU_AJOUTER);
-    Bind(wxEVT_MENU, &InterfaceController::supprimer, this, ID_MENU_SUPPRIMER);
-    Bind(wxEVT_MENU, &InterfaceController::afficherPropos, this, ID_MENU_APROPOS);
+    // Connect buttons for menu
+    Bind(wxEVT_MENU, &InterfaceController::search, this, ID_MENU_SEARCH);
+    Bind(wxEVT_MENU, &InterfaceController::add, this, ID_MENU_ADD);
+    Bind(wxEVT_MENU, &InterfaceController::delete, this, ID_MENU_DELETE);
+    Bind(wxEVT_MENU, &InterfaceController::showAbout, this, ID_MENU_ABOUT);
 }
 
-void InterfaceController::validerFichier(const wxString& fichierManager, const wxString& fichierProg) {
-    // Si il manque un fichier afficher un message
-    if (fichierManager.IsEmpty() || fichierProg.IsEmpty()) {
-        wxMessageBox("Veuillez valider les deux champs avant de continuer.", "Erreur", wxOK | wxICON_ERROR);
+void InterfaceController::validateFile(const wxString& managerFile, const wxString& progFile) {
+    // If a file is missing, show message
+    if (managerFile.IsEmpty() || progFile.IsEmpty()) {
+        wxMessageBox("Please validate both fields before continuing.", "Error", wxOK | wxICON_ERROR);
         return;
     }
 
-    // Utilisé la classe  lecteurFichier setter les routes
-    LecteurFichier lecteur;
-    lecteur.setRouteFichierManager(fichierManager.ToStdString());
-    lecteur.setRouteFichierProg(fichierProg.ToStdString());
-    // Valider les fichiers
-    const bool fichiersValide = lecteur.validerFichiers();
+    // Use FileReader class to set paths
+    FileReader reader;
+    reader.setManagerFilePath(managerFile.ToStdString());
+    reader.setProgrammerFilePath(progFile.ToStdString());
+    // Validate files
+    const bool filesValid = reader.validateFiles();
 
     /*
-        Si valide on créer les vector
-        Lecture des fichiers (implementation des listes)
-        On sort les fichiers
+        If valid, create vectors
+        Read files (list implementation)
+        Sort files
     */
-    if(fichiersValide) {
+    if(filesValid) {
         vector<Manager> managers;
-        vector<Programmer> programmeurs;
+        vector<Programmer> programmers;
 
-        lecteur.lireFichierManager(managers);
-        lecteur.lireFichierProgrammeur(programmeurs);
+        reader.readManagerFile(managers);
+        reader.readProgrammerFile(programmers);
 
         sort(managers.begin(), managers.end());
-        sort(programmeurs.begin(), programmeurs.end());
+        sort(programmers.begin(), programmers.end());
 
-       // Appeler ajouterManager pour chaque manager
+       // Call addManager for each manager
         for (auto& manager : managers) {
-            gestionnaireEmployes.ajouterManager(manager);
+            employeeManager.addManager(manager);
         }
 
-        // Appeler ajouterProgrammeur pour chaque programmeur
-        for (auto& programmeur : programmeurs) {
-            gestionnaireEmployes.ajouterProgrammeur(programmeur);
+        // Call addProgrammer for each programmer
+        for (auto& programmer : programmers) {
+            employeeManager.addProgrammer(programmer);
         }
 
-        afficherMenuPrincipal();
+        showMainMenu();
     } else {
-        // Si non valide on afficher une erreur
-        wxMessageBox("Fichier invalide.", "Erreur", wxOK | wxICON_ERROR);
+        // If invalid, show error
+        wxMessageBox("Invalid file.", "Error", wxOK | wxICON_ERROR);
     }
 }
 
-void InterfaceController::sauvegarderFichier(const wxString& fichierManager, const wxString& fichierProg) {
-    // Si il manque un fichier afficher un message
-    if (fichierManager.IsEmpty() || fichierProg.IsEmpty()) {
-        wxMessageBox("Veuillez valider les deux champs avant de continuer.", "Erreur", wxOK | wxICON_ERROR);
+void InterfaceController::saveFile(const wxString& managerFile, const wxString& progFile) {
+    // If a file is missing, show message
+    if (managerFile.IsEmpty() || progFile.IsEmpty()) {
+        wxMessageBox("Please validate both fields before continuing.", "Error", wxOK | wxICON_ERROR);
         return;
     }
 
-    // Utilisé la classe  lecteurFichier setter les routes
-    LecteurFichier lecteur;
-    lecteur.setRouteFichierManager(fichierManager.ToStdString());
-    lecteur.setRouteFichierProg(fichierProg.ToStdString());
+    // Use FileReader class to set paths
+    FileReader reader;
+    reader.setManagerFilePath(managerFile.ToStdString());
+    reader.setProgrammerFilePath(progFile.ToStdString());
 
-    // Écriture des fichiers
-    lecteur.ecrireFichierManager(this->gestionnaireEmployes.getManagers());
-    lecteur.ecrireFichierProgrammeur(this->gestionnaireEmployes.getProgrammeurs());
+    // Write files
+    reader.writeManagerFile(this->employeeManager.getManagers());
+    reader.writeProgrammerFile(this->employeeManager.getProgrammers());
 
-    wxMessageBox("Fichier Sauvegarder", "Sauvegarde", wxOK | wxICON_INFORMATION);
+    wxMessageBox("File Saved", "Save", wxOK | wxICON_INFORMATION);
 }
 
-void InterfaceController::afficherMenuPrincipal() {
+void InterfaceController::showMainMenu() {
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
 
-    // Créer un nouveau panel si nécessaire
+    // Create new panel if needed
     currentPanel = new wxPanel(this);
 
-    // Mettre à jour le titre
-    this->SetTitle("Menu Principal");
+    // Update title
+    this->SetTitle("Main Menu");
 
-    // Ajouter les boutons principaux
-    wxButton* btnRechercher = new wxButton(currentPanel, -1, "Rechercher", wxPoint(50, 20), wxSize(100, 30));
-    wxButton* btnAjouter = new wxButton(currentPanel, -1, "Ajouter", wxPoint(50, 70), wxSize(100, 30));
-    wxButton* btnSupprimer = new wxButton(currentPanel, -1, "Supprimer", wxPoint(50, 120), wxSize(100, 30));
+    // Add main buttons
+    wxButton* btnSearch = new wxButton(currentPanel, -1, "Search", wxPoint(50, 20), wxSize(100, 30));
+    wxButton* btnAdd = new wxButton(currentPanel, -1, "Add", wxPoint(50, 70), wxSize(100, 30));
+    wxButton* btnDelete = new wxButton(currentPanel, -1, "Delete", wxPoint(50, 120), wxSize(100, 30));
 
-    // Connecter les events des boutons
-    btnRechercher->Bind(wxEVT_BUTTON, &InterfaceController::rechercher, this);
-    btnAjouter->Bind(wxEVT_BUTTON, &InterfaceController::ajouter, this);
-    btnSupprimer->Bind(wxEVT_BUTTON, &InterfaceController::supprimer, this);
+    // Connect button events
+    btnSearch->Bind(wxEVT_BUTTON, &InterfaceController::search, this);
+    btnAdd->Bind(wxEVT_BUTTON, &InterfaceController::add, this);
+    btnDelete->Bind(wxEVT_BUTTON, &InterfaceController::delete, this);
 
-    // Ajuster la taille de la fenêtre
+    // Adjust window size
     currentPanel->Show(true);
     this->Maximize(true);
     this->Layout();
     this->Refresh();
 }
 
-
-
-void InterfaceController::rechercher(wxCommandEvent& event) {
+void InterfaceController::search(wxCommandEvent& event) {
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
 
-    // Créer un nouveau panel si nécessaire
+    // Create new panel if needed
     currentPanel = new wxPanel(this);
-    this->SetTitle("Rechercher");
+    this->SetTitle("Search");
 
-    // Créer un grid avec 2 colonnes
-    wxGridSizer* griller = new wxGridSizer(2, 10, 10);
+    // Create grid with 2 columns
+    wxGridSizer* grid = new wxGridSizer(2, 10, 10);
 
     /**
-     * Création des différents boutons
-     * Bind avec la méthode ouvrirFenetreRecherche avec les props et la methode associer pour l'action
+     * Create different buttons
+     * Bind with openSearchWindow method with props and associated method for action
      */
-    wxButton* btnRechercheManagerParProjet = new wxButton(currentPanel, -1, "Rechercher manager par projet");
-    btnRechercheManagerParProjet->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher manager par projet",
-            "Nom du projet:",
+    wxButton* btnSearchManagerByProject = new wxButton(currentPanel, -1, "Search manager by project");
+    btnSearchManagerByProject->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search manager by project",
+            "Project name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.managerParProjet(input);
+                return this->employeeManager.managerByProject(input);
             }
         );
     });
-    griller->Add(btnRechercheManagerParProjet, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnSearchManagerByProject, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProjetDuManager = new wxButton(currentPanel, -1, "Rechercher projet du manager");
-    btnRechercheProjetDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher projet du manager",
-            "Nom du manager:",
+    wxButton* btnSearchManagerProjects = new wxButton(currentPanel, -1, "Search manager's projects");
+    btnSearchManagerProjects->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search manager's projects",
+            "Manager name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.afficherProjetManager(input);
+                return this->employeeManager.displayManagerProjects(input);
             }
         );
     });
-    griller->Add(btnRechercheProjetDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnSearchManagerProjects, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProgDuManager = new wxButton(currentPanel, -1, "Rechercher programmeur par manager");
-    btnRechercheProgDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher programmeur par manager",
-            "Nom du manager:",
+    wxButton* btnSearchManagerProgrammers = new wxButton(currentPanel, -1, "Search programmers by manager");
+    btnSearchManagerProgrammers->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search programmers by manager",
+            "Manager name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.programmeurAssocier(input);
+                return this->employeeManager.associatedProgrammers(input);
             }
         );
     });
-    griller->Add(btnRechercheProgDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnSearchManagerProgrammers, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheManagerduProg = new wxButton(currentPanel, -1, "Rechercher manager par programmeur");
-    btnRechercheManagerduProg->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher manager du programmeur",
-            "Nom du programmeur:",
+    wxButton* btnSearchProgrammerManager = new wxButton(currentPanel, -1, "Search programmer's manager");
+    btnSearchProgrammerManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search programmer's manager",
+            "Programmer name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.managerDuProgrammeur(input);
+                return this->employeeManager.programmerManager(input);
             }
         );
     });
-    griller->Add(btnRechercheManagerduProg, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnSearchProgrammerManager, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProjetParProg = new wxButton(currentPanel, -1, "Rechercher projet par programmeur");
-    btnRechercheProjetParProg->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher projet par programmeur",
-            "Nom du programmeur:",
+    wxButton* btnSearchProgrammerProjects = new wxButton(currentPanel, -1, "Search projects by programmer");
+    btnSearchProgrammerProjects->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search projects by programmer",
+            "Programmer name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.afficherProjetProgrammeur(input);
+                return this->employeeManager.displayProgrammerProjects(input);
             }
         );
     });
-    griller->Add(btnRechercheProjetParProg, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnSearchProgrammerProjects, 0, wxEXPAND | wxALL, 5);
     
-    wxButton* btnRechercheProgParProjet = new wxButton(currentPanel, -1, "Rechercher programmeur par projet");
-    btnRechercheProgParProjet->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreRecherche(
-            "Rechercher programmeur par projet",
-            "Nom du projet:",
+    wxButton* btnSearchProjectProgrammers = new wxButton(currentPanel, -1, "Search programmers by project");
+    btnSearchProjectProgrammers->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openSearchWindow(
+            "Search programmers by project",
+            "Project name:",
             [this](const string& input) {
-                return this->gestionnaireEmployes.programmeurParProjet(input);
+                return this->employeeManager.programmersByProject(input);
             }
         );
     });
-    griller->Add(btnRechercheProgParProjet, 0, wxEXPAND | wxALL, 5);
-    
+    grid->Add(btnSearchProjectProgrammers, 0, wxEXPAND | wxALL, 5);
 
-
-    // Ajuster la taille
-    currentPanel->SetSizer(griller);
+    // Adjust size
+    currentPanel->SetSizer(grid);
     currentPanel->Layout();
     currentPanel->Show(true);
     this->Maximize(true);
@@ -347,106 +341,106 @@ void InterfaceController::rechercher(wxCommandEvent& event) {
 }
 
 /**
- * Methode pour ouvrir la fenetre de recherche
- * Prend en parametres les strings pour l'affichage et un fonction pour traiter l'action
+ * Method to open search window
+ * Takes display strings and processing function as parameters
  */
-void InterfaceController::ouvrirFenetreRecherche(
-    const wxString& titreFenetre, 
-    const wxString& texteLabel, 
-    function<string(const string&)> fonctionTraitement
+void InterfaceController::openSearchWindow(
+    const wxString& windowTitle, 
+    const wxString& labelText, 
+    function<string(const string&)> processingFunction
 ) {
-    // Créer une nouvelle fenêtre pour la recherche
+    // Create new search window
     wxFrame* frame = new wxFrame(
         this, 
         wxID_ANY, 
-        titreFenetre, 
+        windowTitle, 
         wxDefaultPosition, 
         wxSize(400, 200), 
         wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX)
     );
 
-    wxPanel* panneau = new wxPanel(frame);
+    wxPanel* panel = new wxPanel(frame);
 
-    wxStaticText* label = new wxStaticText(panneau, wxID_ANY, texteLabel, wxPoint(10, 20));
+    wxStaticText* label = new wxStaticText(panel, wxID_ANY, labelText, wxPoint(10, 20));
 
-    wxTextCtrl* inputText = new wxTextCtrl(panneau, wxID_ANY, "", wxPoint(200, 18), wxSize(150, 25));
+    wxTextCtrl* inputText = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(200, 18), wxSize(150, 25));
 
-    // Ajouter un bouton pour rechercher
-    wxButton* btnProcess = new wxButton(panneau, wxID_ANY, "Rechercher", wxPoint(150, 100), wxSize(100, 30));
+    // Add search button
+    wxButton* btnProcess = new wxButton(panel, wxID_ANY, "Search", wxPoint(150, 100), wxSize(100, 30));
 
-    // Connecter le bouton a l'action
-    btnProcess->Bind(wxEVT_BUTTON, [fonctionTraitement, inputText](wxCommandEvent& event) {
-        string resultat = fonctionTraitement(inputText->GetValue().ToStdString());
-        wxMessageBox(wxString(resultat), "Resultat", wxOK | wxICON_INFORMATION);
+    // Connect button to action
+    btnProcess->Bind(wxEVT_BUTTON, [processingFunction, inputText](wxCommandEvent& event) {
+        string result = processingFunction(inputText->GetValue().ToStdString());
+        wxMessageBox(wxString(result), "Result", wxOK | wxICON_INFORMATION);
     });
 
-    // Afficher la fenêtre de recherche
+    // Show search window
     frame->Show(true);
 }
 
-void InterfaceController::ajouter(wxCommandEvent& event) {
+void InterfaceController::add(wxCommandEvent& event) {
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
 
-    // Créer un nouveau panel si nécessaire
+    // Create new panel if needed
     currentPanel = new wxPanel(this);
-    this->SetTitle("Ajouter");
+    this->SetTitle("Add");
 
-    // Créer un grid avec 2 colonnes
-    wxGridSizer* griller = new wxGridSizer(2, 10, 10);
+    // Create grid with 2 columns
+    wxGridSizer* grid = new wxGridSizer(2, 10, 10);
 
     /**
-     * Création des différents boutons
-     * Bind avec la méthode ouvrirFenetreAjouterSupprimer avec les props et la methode associer pour l'action
+     * Create different buttons
+     * Bind with openAddDeleteWindow method with props and associated method for action
      */
-    wxButton* btnRechercheManagerParProjet = new wxButton(currentPanel, -1, "Ajouter un projet a un manager");
-    btnRechercheManagerParProjet->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Ajouter un projet a un manager",
-            "Ajouter le projet:",
-            "au manager:",
-            "ajouter",
-            gestionnaireEmployes.getManagers(),
-            [this](const string& lastName, const string& projet) {
-                return this->gestionnaireEmployes.ajouterProjetAuManager(lastName, projet);
+    wxButton* btnAddProjectToManager = new wxButton(currentPanel, -1, "Add project to manager");
+    btnAddProjectToManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Add project to manager",
+            "Project to add:",
+            "to manager:",
+            "add",
+            employeeManager.getManagers(),
+            [this](const string& lastName, const string& project) {
+                return this->employeeManager.addProjectToManager(lastName, project);
             }
         );
     });
-    griller->Add(btnRechercheManagerParProjet, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnAddProjectToManager, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProjetDuManager = new wxButton(currentPanel, -1, "Ajouter un programmeur a un manager");
-    btnRechercheProjetDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Ajouter un programmeur a un manager",
-            "Ajouter le programmeur:",
-            "au manager:",
-            "ajouter",
-            gestionnaireEmployes.getManagers(),
+    wxButton* btnAddProgrammerToManager = new wxButton(currentPanel, -1, "Add programmer to manager");
+    btnAddProgrammerToManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Add programmer to manager",
+            "Programmer to add:",
+            "to manager:",
+            "add",
+            employeeManager.getManagers(),
             [this](const string& lastName, const string& prog) {
-                return this->gestionnaireEmployes.ajouterProgAuManager(lastName, prog);
+                return this->employeeManager.addProgrammerToManager(lastName, prog);
             }
         );
     });
-    griller->Add(btnRechercheProjetDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnAddProgrammerToManager, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProgDuManager = new wxButton(currentPanel, -1, "Ajouter un projet a un programmeur");
-    btnRechercheProgDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Ajouter un projet a un programmeur",
-            "Ajouter le projet:",
-            "au programmeur:",
-            "ajouter",
-            gestionnaireEmployes.getProgrammeurs(),
-            [this](const string& lastName, const string& projet) {
-                return this->gestionnaireEmployes.ajouterProjetAuProg(lastName, projet);
+    wxButton* btnAddProjectToProgrammer = new wxButton(currentPanel, -1, "Add project to programmer");
+    btnAddProjectToProgrammer->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Add project to programmer",
+            "Project to add:",
+            "to programmer:",
+            "add",
+            employeeManager.getProgrammers(),
+            [this](const string& lastName, const string& project) {
+                return this->employeeManager.addProjectToProgrammer(lastName, project);
             }
         );
     });
-    griller->Add(btnRechercheProgDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnAddProjectToProgrammer, 0, wxEXPAND | wxALL, 5);
 
-    // Ajuster la taille
-    currentPanel->SetSizer(griller);
+    // Adjust size
+    currentPanel->SetSizer(grid);
     currentPanel->Layout();
     currentPanel->Show(true);
     this->Maximize(true);
@@ -454,69 +448,69 @@ void InterfaceController::ajouter(wxCommandEvent& event) {
     this->Refresh();
 }
 
-void InterfaceController::supprimer(wxCommandEvent& event) {
+void InterfaceController::delete(wxCommandEvent& event) {
     if (currentPanel) {
-        currentPanel->Destroy();  // Détruire l'ancien panel
+        currentPanel->Destroy();  // Destroy old panel
     }
 
-    // Créer un nouveau panel si nécessaire
+    // Create new panel if needed
     currentPanel = new wxPanel(this);
-    this->SetTitle("Retirer");
+    this->SetTitle("Remove");
 
-    // Créer un grid avec 2 colonnes
-    wxGridSizer* griller = new wxGridSizer(2, 10, 10);
+    // Create grid with 2 columns
+    wxGridSizer* grid = new wxGridSizer(2, 10, 10);
 
     /**
-     * Création des différents boutons
-     * Bind avec la méthode ouvrirFenetreAjouterSupprimer avec les props et la methode associer pour l'action
+     * Create different buttons
+     * Bind with openAddDeleteWindow method with props and associated method for action
      */
-    wxButton* btnRechercheManagerParProjet = new wxButton(currentPanel, -1, "Retirer un projet d'un manager");
-    btnRechercheManagerParProjet->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Retirer un projet d'un manager",
-            "Retirer le projet:",
-            "au manager:",
-            "retirer",
-            gestionnaireEmployes.getManagers(),
-            [this](const string& lastName, const string& projet) {
-                return this->gestionnaireEmployes.supprimerProjetAuManager(lastName, projet);
+    wxButton* btnRemoveProjectFromManager = new wxButton(currentPanel, -1, "Remove project from manager");
+    btnRemoveProjectFromManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Remove project from manager",
+            "Project to remove:",
+            "from manager:",
+            "remove",
+            employeeManager.getManagers(),
+            [this](const string& lastName, const string& project) {
+                return this->employeeManager.removeProjectFromManager(lastName, project);
             }
         );
     });
-    griller->Add(btnRechercheManagerParProjet, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnRemoveProjectFromManager, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProjetDuManager = new wxButton(currentPanel, -1, "Retirer un programmeur d'un manager");
-    btnRechercheProjetDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Retirer un programmeur d'un manager",
-            "Retirer le programmeur:",
-            "au manager:",
-            "retirer",
-            gestionnaireEmployes.getManagers(),
+    wxButton* btnRemoveProgrammerFromManager = new wxButton(currentPanel, -1, "Remove programmer from manager");
+    btnRemoveProgrammerFromManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Remove programmer from manager",
+            "Programmer to remove:",
+            "from manager:",
+            "remove",
+            employeeManager.getManagers(),
             [this](const string& lastName, const string& prog) {
-                return this->gestionnaireEmployes.supprimerProgAuManager(lastName, prog);
+                return this->employeeManager.removeProgrammerFromManager(lastName, prog);
             }
         );
     });
-    griller->Add(btnRechercheProjetDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnRemoveProgrammerFromManager, 0, wxEXPAND | wxALL, 5);
 
-    wxButton* btnRechercheProgDuManager = new wxButton(currentPanel, -1, "Retirer un projet d'un programmeur");
-    btnRechercheProgDuManager->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
-        ouvrirFenetreAjouterSupprimer(
-            "Retirer un projet d'un programmeur",
-            "Retirer le projet:",
-            "au programmeur:",
-            "retirer",
-            gestionnaireEmployes.getProgrammeurs(),
-            [this](const string& lastName, const string& projet) {
-                return this->gestionnaireEmployes.supprimerProjetAuProg(lastName, projet);
+    wxButton* btnRemoveProjectFromProgrammer = new wxButton(currentPanel, -1, "Remove project from programmer");
+    btnRemoveProjectFromProgrammer->Bind(wxEVT_BUTTON, [this](wxCommandEvent& event) {
+        openAddDeleteWindow(
+            "Remove project from programmer",
+            "Project to remove:",
+            "from programmer:",
+            "remove",
+            employeeManager.getProgrammers(),
+            [this](const string& lastName, const string& project) {
+                return this->employeeManager.removeProjectFromProgrammer(lastName, project);
             }
         );
     });
-    griller->Add(btnRechercheProgDuManager, 0, wxEXPAND | wxALL, 5);
+    grid->Add(btnRemoveProjectFromProgrammer, 0, wxEXPAND | wxALL, 5);
 
-    // Ajuster la taille
-    currentPanel->SetSizer(griller);
+    // Adjust size
+    currentPanel->SetSizer(grid);
     currentPanel->Layout();
     currentPanel->Show(true);
     this->Maximize(true);
@@ -525,79 +519,79 @@ void InterfaceController::supprimer(wxCommandEvent& event) {
 }
 
 /**
- * Methode avec vector de type générique
- * Prend en parametres les strings pour l'affichage et un fonction pour traiter l'action
+ * Method with generic type vector
+ * Takes display strings and processing function as parameters
  */
 template <typename T>
-void InterfaceController::ouvrirFenetreAjouterSupprimer(
-    const wxString& titreFenetre, 
-    const wxString& texteLabel1, 
-    const wxString& texteLabel2,
+void InterfaceController::openAddDeleteWindow(
+    const wxString& windowTitle, 
+    const wxString& labelText1, 
+    const wxString& labelText2,
     const wxString& action,
-    const vector<T>& employes,
-    function<void(const string&, const string&)> fonctionTraitement
+    const vector<T>& employees,
+    function<void(const string&, const string&)> processingFunction
 ) {
-    // Créer une nouvelle fenêtre pour la recherche
+    // Create new search window
     wxFrame* searchFrame = new wxFrame(
         this, 
         wxID_ANY, 
-        titreFenetre, 
+        windowTitle, 
         wxDefaultPosition, 
         wxSize(400, 250), 
         wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX)
     );
 
-    wxPanel* panneau = new wxPanel(searchFrame);
-    wxStaticText* label1 = new wxStaticText(panneau, wxID_ANY, texteLabel1, wxPoint(10, 20));
-    wxTextCtrl* propriete = new wxTextCtrl(panneau, wxID_ANY, "", wxPoint(200, 18), wxSize(150, 25));
-    wxStaticText* label2 = new wxStaticText(panneau, wxID_ANY, texteLabel2, wxPoint(10, 70));
+    wxPanel* panel = new wxPanel(searchFrame);
+    wxStaticText* label1 = new wxStaticText(panel, wxID_ANY, labelText1, wxPoint(10, 20));
+    wxTextCtrl* property = new wxTextCtrl(panel, wxID_ANY, "", wxPoint(200, 18), wxSize(150, 25));
+    wxStaticText* label2 = new wxStaticText(panel, wxID_ANY, labelText2, wxPoint(10, 70));
 
-    // Créer un dropdown pour les noms
-    wxArrayString nomsArray;
-    for (auto& item : employes) {
+    // Create dropdown for names
+    wxArrayString namesArray;
+    for (auto& item : employees) {
         const string lastName = item.getLastName(); 
-        nomsArray.Add(lastName); // Ajouter les noms des employés
+        namesArray.Add(lastName); // Add employee last names
     }
-    wxChoice* dropdownNoms = new wxChoice(panneau, wxID_ANY, wxPoint(200, 68), wxSize(150, 25), nomsArray);
+    wxChoice* dropdownNames = new wxChoice(panel, wxID_ANY, wxPoint(200, 68), wxSize(150, 25), namesArray);
 
-    // Ajouter un bouton pour l'action
-    wxButton* btnProcess = new wxButton(panneau, wxID_ANY, action, wxPoint(150, 150), wxSize(100, 30));
+    // Add action button
+    wxButton* btnProcess = new wxButton(panel, wxID_ANY, action, wxPoint(150, 150), wxSize(100, 30));
 
-    // Connecter le bouton
-    btnProcess->Bind(wxEVT_BUTTON, [this, propriete, action, dropdownNoms, fonctionTraitement](wxCommandEvent& event) {
+    // Connect button
+    btnProcess->Bind(wxEVT_BUTTON, [this, property, action, dropdownNames, processingFunction](wxCommandEvent& event) {
         
-        // Récupérer le lastName sélectionné dans le dropdown
-        wxString nomSelectionner = dropdownNoms->GetStringSelection();
+        // Get selected lastName from dropdown
+        wxString selectedName = dropdownNames->GetStringSelection();
         try {
-            fonctionTraitement(nomSelectionner.ToStdString(), propriete->GetValue().ToStdString());
-            // Afficher succès
-            wxMessageBox(propriete->GetValue() + " " + action, "Résultat", wxOK | wxICON_INFORMATION);
+            processingFunction(selectedName.ToStdString(), property->GetValue().ToStdString());
+            // Show success
+            wxMessageBox(property->GetValue() + " " + action, "Result", wxOK | wxICON_INFORMATION);
         } catch(string message) {
-            // Afficher erreur
-            wxMessageBox(message, "Erreur", wxNO | wxICON_ERROR);
+            // Show error
+            wxMessageBox(message, "Error", wxNO | wxICON_ERROR);
         }
     });
 
-    // Afficher la fenêtre de recherche
+    // Show search window
     searchFrame->Show(true);
 }
 
 void InterfaceController::OnClose(wxCloseEvent& event) {
-    // Afficher une boîte de dialogue pour demander confirmation
+    // Show confirmation dialog
     int result = wxMessageBox(
-        "Voulez-vous sauvegarder les fichiers avant de fermer l'application ?", 
-        "Confirmer", 
+        "Do you want to save files before closing the application?", 
+        "Confirm", 
         wxYES_NO | wxCANCEL | wxICON_QUESTION);
 
     if (result == wxYES) {
         event.Veto();
-        // Créer un event et appeler la méthode sauvegarder avec le paramètre `true`
-        wxCommandEvent sauvegardeEvent(wxEVT_BUTTON);
-        sauvegarder(sauvegardeEvent);        
+        // Create event and call save method with `true` parameter
+        wxCommandEvent saveEvent(wxEVT_BUTTON);
+        save(saveEvent);        
     } else if (result == wxNO) {
-        event.Skip(); // Fermer l'app
+        event.Skip(); // Close app
     } else {
-        // Annuler la fermeture
+        // Cancel closing
         event.Veto();
     }
 }

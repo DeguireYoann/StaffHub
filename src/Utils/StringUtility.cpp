@@ -1,8 +1,8 @@
 /*
 
-IFT1169 - TP3 A24 -
 
-Author: Yoann Deguire - December 2024
+
+Author: Yoann Deguire 
 
 Description:
 StringUtility class that serves as a utility with string manipulation methods

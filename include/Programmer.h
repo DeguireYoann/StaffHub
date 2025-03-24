@@ -1,8 +1,8 @@
 /*
 
-IFT1169 - TP3 A24 -
 
-Auteur: Yoann Deguire - decembre 2024
+
+Auteur: Yoann Deguire
 
 Description:
 Signature de la classe Programmer
@@ -10,7 +10,7 @@ Signature de la classe Programmer
 */
 #include <iostream>
 #include <string>
-#include "employe.h"
+#include "Employee.h"
 
 using namespace std;
 
