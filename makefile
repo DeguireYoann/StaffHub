@@ -1,33 +1,38 @@
-CXX = g++
-CXXFLAGS = -Os -Wall -std=c++20 `wx-config --cxxflags`
-OPT = -pedantic
-LDFLAGS = `wx-config --libs`
+# Configuration MinGW64
+CXX := g++
+WX_CONFIG := wx-config
+WX_CXXFLAGS := $(shell $(WX_CONFIG) --cxxflags)
+WX_LIBS := $(shell $(WX_CONFIG) --libs)
 
-# Configuration pour suppression et extension sur Windows
-effacer = rm
-extension =
+CXXFLAGS := -std=c++20 -Wall -Wextra -Iinclude $(WX_CXXFLAGS)
+LDFLAGS := $(WX_LIBS)
+TARGET := StaffHub.exe
 
-ifeq ($(OS), Windows_NT)
-$(info ************  Windows ************)
-effacer = del
-extension = .exe
-endif
+# Sources
+SRC_DIR := src
+SRCS := \
+	$(SRC_DIR)/Employee/Employee.cpp \
+	$(SRC_DIR)/Employee/Manager.cpp \
+	$(SRC_DIR)/Employee/Programmer.cpp \
+	$(SRC_DIR)/Controllers/EmployeeController.cpp \
+	$(SRC_DIR)/Controllers/InterfaceController.cpp \
+	$(SRC_DIR)/Utils/FileReader.cpp \
+	$(SRC_DIR)/Utils/StringUtility.cpp \
+	$(SRC_DIR)/Main.cpp
 
-# Cible par défaut
-all: tp3A24$(extension)
+OBJS := $(SRCS:.cpp=.o)
 
-# Compilation des fichiers .cpp en .o
-%.o : %.cpp
-	$(CXX) $(CXXFLAGS) $(OPT) -c $< -o $@
+# Règles
+all: $(TARGET)
 
-# Création de l'exécutable
-tp3A24$(extension): tp3A24.o employe.o manager.o programmeur.o EmployeeController.o lecteurFichier.o stringManager.o gestionnaireInterface.o
+$(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-# Règle pour exécuter le programme
-run: tp3A24$(extension)
-	./tp3A24$(extension)
+%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Nettoyage des fichiers temporaires
 clean:
-	$(effacer) *.o tp3A24$(extension)
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean
